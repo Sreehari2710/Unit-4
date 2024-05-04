@@ -1,0 +1,2311 @@
+*********************************************47.1.1.*********************************************
+Non-static initializer block.
+
+In a Java class, the fields are normally initialized in the constructors. However, there is another way of initializing them in an unnamed block also called initializer block or a non-static initializer block.
+
+For example, in the below code you will notice that the field value is initialized to 3 in an initializer block.
+
+Once the code is executed you will notice that the code snippets in the initializer blocks are executed (in the order in which they appear in the code) before the code in the constructor is executed. This is because the Java compiler copies all initializer blocks in the order they appear, into every constructor.
+
+Since we are creating two instances of class A using the new keyword, the constructor is called twice and during the constructor call first, all the initializer blocks are executed.
+
+If there is a block of code which has to be executed before the code inside any of the constructors is executed, such code can be placed in an initializer block.
+
+
+Program:
+package q11289;
+public class NonStaticInitBlockDemo {
+  public static void main(String[] args) {
+    A a1 = new A();
+    A a2 = new A();
+  }
+}
+class A {
+  private int value;
+  //below is an example of non-static initialization block
+  {
+    value = 3;
+    System.out.println("In non-static init block 1");
+  }
+  public A() {
+    System.out.println("In constructor");
+    System.out.println("value = " + value);
+  }
+  //below is an example of another non-static initialization block
+  {
+    System.out.println("In non-static init block 2");
+  }
+}
+
+
+What will be output of the above program?
+·	In non-static init block 1
+In non-static init block 2
+In constructor
+value = 3
+In non-static init block 1
+In non-static init block 2
+In constructor
+value = 3
+
+
+              
+*********************************************47.1.2*********************************************
+
+Demonstration of non-static initialization blocks.
+
+Here's a small example to explain non-static initialization blocks:
+class MyClass {
+    private int x;
+    private String message;
+
+    {
+        // Non-static initialization block
+        x = 10;
+        message = "Hello from non-static initialization block!";
+        System.out.println(message);
+    }
+
+    public MyClass() {
+        System.out.println("Default constructor called.");
+    }
+
+    public MyClass(int value) {
+        System.out.println("Parameterized constructor called.");
+        x = value;
+    }
+
+    public static void main(String[] args) {
+        MyClass obj1 = new MyClass();
+        System.out.println("Value of x in obj1: " + obj1.x);
+
+        MyClass obj2 = new MyClass(20);
+        System.out.println("Value of x in obj2: " + obj2.x);
+    }
+}
+Output:
+Hello from non-static initialization block!
+Default constructor called.
+Value of x in obj1: 10
+Hello from non-static initialization block!
+Parameterized constructor called.
+Value of x in obj2: 20
+
+In this example, we have a class MyClass with two instance variables: x (an integer) and message (a string).
+
+Within the class, we have a non-static initialization block:
+{
+    // Non-static initialization block
+    x = 10;
+    message = "Hello from non-static initialization block!";
+    System.out.println(message);
+}
+This non-static initialization block is executed before any constructor is called, and it initializes the instance variables x and message with some values. It also prints the message to the console.
+
+The class has two constructors: a default constructor and a parameterized constructor that takes an integer value.
+In the main method, we create two instances of MyClass:
+1.	obj1 is created using the default constructor.
+2.	obj2 is created using the parameterized constructor with an argument of 20.
+For each instance creation, the non-static initialization block is executed first, followed by the respective constructor.
+
+When creating obj1, the non-static initialization block initializes x to 10 and message to "Hello from non-static initialization block!". Then, the default constructor is called, and nothing happens within it.
+
+When creating obj2, the non-static initialization block is executed again, initializing x to 10 and message to "Hello from non-static initialization block!". Then, the parameterized constructor is called, which overrides the value of x with 20.
+
+Finally, we print the values of x for both instances, which shows that obj1.x is 10 (initialized by the non-static initialization block), and obj2.x is 20 (overridden by the parameterized constructor).
+
+This example demonstrates that non-static initialization blocks are executed before any constructor and are executed every time an instance of the class is created. They can be used to perform initialization logic or assign initial values to instance variables, separate from the constructors.
+When is a non-static initialization block executed in Java?
+
+·	Before any constructor is called, every time an instance of the class is created.
+
+
+
+********************************************* 47.1.3********************************************* 
+ Non static init blocks
+55:26
+Consider the following Java code snippet, which defines two classes: Person and PersonManager.
+
+1. Person Class:
+·	The Person class represents a person with name, age, and address attributes.It has a constructor to initialize these attributes and getter methods to access them.
+2.PersonManager Class:
+·	The PersonManager class manages instances of the Person class.It has a private instance variable person of type Person.A non-static initialization block is provided to initialize person with user input.
+
+Your task is to complete the non-static initialization block in the PersonManager class to:
+·	Prompt the user to enter name, age, and address.
+·	Create a new Person object with the provided input.
+·	Assign the created Person object to the person instance variable.
+Once completed, the printPersonDetails() method should display the details of the person object.
+
+
+
+import java.util.Scanner;
+
+class Person {
+    private String name;
+    private int age;
+    private String address;
+
+    public Person(String name, int age, String address) {
+        this.name = name;
+        this.age = age;
+        this.address = address;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+}
+
+class PersonManager {
+    private Person person;
+
+    {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter name:");
+        String name = scanner.nextLine();
+        System.out.print("Enter age:");
+        int age = scanner.nextInt();
+        scanner.nextLine(); // consume newline
+        System.out.print("Enter address:");
+        String address = scanner.nextLine();
+
+        person = new Person(name, age, address);
+    }
+
+    public void printPersonDetails() {
+        System.out.println("Name: " + person.getName());
+        System.out.println("Age: " + person.getAge());
+        System.out.println("Address: " + person.getAddress());
+    }
+}
+
+public class PersonMain {
+    public static void main(String[] args) {
+        PersonManager manager = new PersonManager();
+        manager.printPersonDetails();
+    }
+}
+
+
+
+****************************************** 47.2.1.********************************************* 
+
+What are static init blocks?
+Initializer blocks which are prefixed with the static keyword are called static initializer block.
+
+Like the non-static initializer blocks, a class can have any number of static initializer blocks and they will be executed in the order in which they appear in the code.
+
+The code inside the non-static initalizer block is copied inside the constructor and executed during every invocation of the constructor.
+
+However, a static initializer block is executed only once when the class is loaded in memory. It has nothing to do with constructor invocation. Even if the constructor is not called to create an object instance, as long as the class is loaded the static initializer blocks get executed.
+
+Since the classes are loaded only once by the system class loader, these static initializer blocks get executed only once.
+
+Program :
+
+
+public class StaticInitBlockDemo {
+  public static void main(String[] args) {
+    A a1 = new A();
+    A a2 = new A();
+  }
+}
+class A {
+  //below is an example of static initialization block
+  static {
+    System.out.println("In static init block 1");
+  }
+  public A() {
+    System.out.println("In constructor");
+  }
+  //below is an example of another static initialization block
+  static {
+    System.out.println("In static init block 2");
+  }
+}
+
+What will be the output of the above program?
+
+
+
+
+·	In static init block 1
+
+In static init block 2
+
+In constructor
+
+In constructor
+
+
+
+
+
+
+*********************************************47.2.2.*********************************************
+
+Static initialization block - I
+
+The class named StaticInitializationExample has been defined and declared a static integer variable named x within the class.
+Your task is to:
+·	Implement a static initialization block within the class.
+·	Prompt the user to enter a value for x.
+·	Read the integer input provided by the user and assign it to the static variable x.
+·	Provide feedback by printing the statement as shown in displayed test cases.
+
+
+Note:
+·	Implementation of the main method where the program execution starts has been given to you.
+·	Observe the behavior of the code when executed.
+
+
+
+
+
+
+import java.util.Scanner;
+public class StaticInitializationExample {
+    // Static variable declaration
+    static int x;
+    // Static initialization block
+    static {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("value of x: ");
+        x = scanner.nextInt();
+        System.out.println("Static block initialized with x = " + x);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Inside main method");
+        System.out.println("Value of x: " + x);
+    }
+}
+
+
+47.2.3. Static initialization block - II
+You are provided with a class named MultipleStaticBlocksDemo. This class has a static integer variable a.
+Your task is to:
+1.	Implement a static initialization block that prompts the user to enter a value for a, reads the input provided by the user, and assigns it to the static variable a. It should also print a message "First static block executed" when executed.
+2.	Implement another static initialization block that prints a message "Second static block executed" when executed.
+3.	Provide feedback by printing the statement as shown in the displayed test cases.
+
+Note:
+·	Implementation of the main method where the program execution starts has been given to you.
+·	Observe the behavior of the code when executed.
+
+import java.util.Scanner;
+public class MultipleStaticBlocksDemo {
+    static int a;
+
+    static {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("value for a: ");
+        a = scanner.nextInt();
+        System.out.println("First static block executed");
+    }
+    static {
+        System.out.println("Second static block executed");
+    }
+    public static void main(String[] args) {
+        System.out.println("Static block initialized with a = " + a);
+    }
+}
+
+
+
+*********************************************48.1.1*********************************************
+
+
+Understanding static fields
+
+In a Java class, the fields which are marked as static are called static fields and those that are not marked as static are called as instance fields or simply fields. For example, in the below code:
+class A {
+    static int a;
+    int b;
+}
+a is a static field, while b is an instance field. Meaning, if we create two or three instances of class A as given below:
+A a1 = new A();
+A a2 = new A();
+A a3 = new A();
+All the three instances a1, a2 and a3 will have their individual copies of instance field b. However, all the three instances will share a single copy of the static field a.
+
+Static fields can be initalized in static initializer blocks.
+
+Instance fields are accessed using the dot . operator on the references of a class. However, the static fields are accessed using the dot . operator directly on the class name and not references (as shown in the below StaticFieldDemo class).
+
+See and retype the below code to understand the difference between static and instance fields.
+
+After execution, in the output you will notice that the value of aStaticField is the same in both a1 and a2, while the values stored in instanceField differ.
+
+Also note how the static field aStaticField is directly accessed using the class name in the statement: A.aStaticField = 5;.
+
+
+package q11291;
+public class StaticFieldDemo {
+    public static void main(String[] args) {
+        A.aStaticField = 5;
+        A a1 = new A(3);
+        A a2 = new A(4);
+        System.out.println("a1 = " + a1);
+        System.out.println("a2 = " + a2);
+        System.out.println("A.aStaticField = " + A.aStaticField);
+    }
+}
+class A {
+    public static int aStaticField;
+    private int instanceField;
+    public A(int instanceField) {
+        this.instanceField = instanceField;
+    }
+    public String toString() {
+        return "A [instanceField = " + instanceField + ", aStaticField = " + aStaticField + "]";
+    }
+}
+
+
+
+*********************************************  48.1.2. *********************************************
+
+static fields
+Your task is to:
+·	Create a class named Counter with a static integer field named count.
+·	Implement static methods increment() and decrement() to increment and decrement the count field.
+·	Write a method to display the current value of count.
+
+Note: The program to test the Counter class by creating multiple instances and calling the static methods to observe the changes in the count field has been provided to you in the editor.
+
+public class CounterTest {
+    private static int count = 1;
+
+    public static void increment() {
+        count++;
+    }
+
+    public static void decrement() {
+        count--;
+    }
+
+    public static void displayCount() {
+        System.out.println("Current value of count is: " + count);
+    }
+
+    public static void main(String[] args) {
+        // Test case 1
+        displayCount(); // Initial value of count is 0
+
+        increment();    // Increment count by 1
+        displayCount(); // Current value of count is 1
+
+
+        decrement();    // Decrement count by 1
+        displayCount(); // Current value of count is 1
+    }
+}
+
+48.1.3. Static fields - II
+You are tasked with creating a Java program to manage quiz scores and calculate the average score. To accomplish this, you need to create a class called Quiz with the following specifications:
+1. Create a class named Quiz.
+2. Inside the Quiz class, declare the following private static variables:
+·	averageScore of type double to store the average score.
+·	numQuizzes of type int to store the number of quizzes taken.
+3. Implement a static method named updateAverage() with the following specifications:
+·	Takes a parameter score of type double representing the score of the current quiz.
+·	Updates the averageScore and numQuizzes based on the new score.
+
+Note:
+The main() method has been provided to you in the editor.
+
+import java.util.Scanner;
+public class Quiz {
+    private static double averageScore = 0;
+    private static int numQuizzes = 0;
+
+    public static void updateAverage(double score) {
+        averageScore = (averageScore * numQuizzes + score) / (numQuizzes + 1);
+        numQuizzes++;
+        System.out.println("Current average score: " + averageScore);
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.print("Enter quiz score (or type 'q' to quit): ");
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("q")) {
+break;
+            }
+            try {
+double score = Double.parseDouble(input);
+updateAverage(score);
+            } catch (NumberFormatException e) {
+System.out.println("Invalid input. Please enter a valid number or 'q' to quit.");
+            }
+        }
+        scanner.close();
+    }
+}
+*********************************************  48.2.1. *********************************************
+
+Understanding static methods
+
+In a Java class, the methods which are marked as static are called static methods and those that are not marked as static are called as instance methods or simply methods.
+
+If you remember, the main() method is always marked as static so that the JVM can directly invoke it without creating an instance of the class which is being executed.
+
+In other words, a method which is marked as static can be called or invoked directly without creating an instance of that class.
+
+For example, in the below code:
+class A {
+  static int a;
+  int b;
+  public static int getA() {
+    return a;
+  }
+  public int getB() {
+    return b;
+  }
+}
+getA() is a static method, while getB() is an instance method.
+
+Static methods can access only static fields and other static members like methods and cannot access instance members. If a static method is trying to access an instance member (field or a method), the compiler will throw an error saying the instance field/method cannot be accessed from a static context.
+
+Just like static fields, static methods too are accessed using the dot. operator on the class name. Even though both the static fields and static methods can be referenced through an object's instance/reference, it is not recommended to follow this coding style, as the person reading the code will not have a clear picture of whether these fields and methods are of class level or instance level.
+
+Identify the error and correct the given code to understand the usage of static method.
+
+After execution, in the output you will notice that the value of A.getInstanceCount() is the same in both a1 and a2, because both the references a1 and a2 share a single copy of the static field named counter.
+
+In the first invocation of the constructor A() for a1, counter is incremented from its default value 0 to 1. During the second invocation of the constructor for a2, the value of the static field counter is incremented from 1 to 2. Since the increment happens twice on the counter, we see the counter value as 2, when we print a1 using System.out.println("a1 = " + a1);.
+
+Also note how the static method getInstanceCount() is directly accessed using the class name in the statement: System.out.println("A.getInstanceCount() = " + A.getInstanceCount());.
+
+Note: Please don't change the package name.
+
+class A {
+    private int instanceField;
+    private static int counter = 0; // Static field to keep track of instances
+
+    public A(int instanceField) {
+        this.instanceField = instanceField;
+        counter++; // Increment the counter for each instance created
+    }
+
+    public static int getInstanceCount() {
+        return counter; // Static method to access the static field
+    }
+
+    @Override
+    public String toString() {
+        return "A [instanceField = " + instanceField + ", counter = " + counter + "]";
+    }
+}
+
+public class StaticMethodDemo {
+    public static void main(String[] args) {
+        A a1 = new A(3);
+        A a2 = new A(4);
+
+        System.out.println("a1 = " + a1);
+        System.out.println("a2 = " + a2);
+        // Accessing static method correctly using class name
+        System.out.println("A.getInstanceCount() = " + A.getInstanceCount());
+    }
+}
+
+
+********************************************* 48.2.2. *********************************************
+
+Static methods - Add integers
+
+You are provided with a Java program that defines a Calculator class with a static method add for performing addition on two integers. Fill in the missing code to execute it without any errors.
+
+//write the code
+    public static int add(int x, int y) {
+        return x + y;
+    }
+
+
+
+*********************************************  48.2.3. *********************************************
+
+Static methods - Concatenate strings
+
+You are provided with a Java program that defines a StringUtils class with a static method concatenate for concatenating two strings. Fill in the missing code to execute it without any errors.
+
+import java.util.Scanner;
+class A {
+    public static String concatenate(String str1, String str2) {
+        return str1 + str2;
+    }
+}
+
+public class StringUtils {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        
+        String str1 = scanner.nextLine();
+        
+        
+        String str2 = scanner.nextLine();
+        
+        String result = A.concatenate(str1, str2);
+        System.out.println( result);
+        
+        scanner.close();
+    }
+}
+
+
+*********************************************  48.3.1. ********************************************* 
+
+Static classes
+
+A Java class which is marked as static is called a static class.
+
+A static class can be written only inside another class. For example:
+class A {
+  static class B {
+    private int b;
+    public B(int b) {
+      this.b = b;
+    }
+  }
+}
+The static class B is called a static nested class since it is nested inside class A.
+
+Just like static fields and static methods, static nested classes can be accessed using their other class name. For example instances of class B can be created as below:
+A.B b = new B();
+
+Algorithm
+
+·	Start the program.
+·	Create a class named StaticClassDemo.
+·	Define the main method within the StaticClassDemo class.
+o	Create an instance of the nested static class A named a1 with a value of 3.
+o	Create an instance of the nested static class A named a2 with a value of 4.
+o	Print the string representation of a1 in the format "a1 = ".
+o	Print the string representation of a2 "a1 = ".
+·	Define a static nested class named A within the StaticClassDemo class.
+·	Declare a private integer variable named value within the A class.
+·	Define a constructor within the A class that accepts an integer parameter value.
+o	Set the value of the value variable to the provided parameter value.
+·	Define a toString method within the A class.
+o	Return a string representation of the object in the format "A [value = ]".
+·	 End the program.
+
+
+
+
+// Define the main class StaticClassDemo
+public class StaticClassDemo {
+    
+    // Define the main method
+    public static void main(String[] args) {
+        // Create instances of the nested static class A
+        A a1 = new A(3);
+        A a2 = new A(4);
+        
+        // Print string representation of a1 and a2
+        System.out.println("a1 = " + a1);
+        System.out.println("a2 = " + a2);
+    }
+    
+    // Define a static nested class A
+    static class A {
+        // Private integer variable value
+        private int value;
+        
+        // Constructor for class A
+        public A(int value) {
+            this.value = value;
+        }
+        
+        // Override toString method to return string representation
+        @Override
+        public String toString() {
+            return "A [value = " + value + "]";
+        }
+    }
+}
+
+
+********************************************* 48.3.2. ********************************************* 
+
+Static classes example
+
+Implement a static nested class named MathUtils within the MathMain class with the following static methods:
+·	add(int a, int b): Returns the sum of two integers.
+·	subtract(int a, int b): Returns the result of subtracting the second integer from the first.
+·	multiply(int a, int b): Returns the product of two integers.
+
+Note: Implementation of the main method in the MathMain class, where the program execution starts, has been given to you in the editor.
+
+
+import java.util.Scanner;
+public class MathMain {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int a = scanner.nextInt();
+        int b = scanner.nextInt();
+        scanner.close();
+        System.out.println("Addition: " + MathUtils.add(a, b));
+        System.out.println("Subtraction: " + MathUtils.subtract(a, b));
+        System.out.println("Multiplication: " + MathUtils.multiply(a, b));
+    }
+    static class MathUtils {
+        public static int add(int a, int b) {
+            return a + b;
+        }
+        public static int subtract(int a, int b) {
+            return a - b;
+        }
+        public static int multiply(int a, int b) {
+            return a * b;
+        }
+    }
+}
+
+
+********************************************* 49.1.1 *********************************************
+
+Understanding nested class
+
+In Java, we can write a class inside another class. Such classes are called nested classes.
+
+We can classify the nested classes into four types :
+Inner classes
+Static nested classes
+Local classes
+Anonymous classes
+We will learn about inner classes here and the rest in the later sections.
+
+Nested classes which are not declared as static are called Inner classes.
+
+For example:
+class A { //this is called a top-level class
+    class B { //this is an inner class
+    }
+}
+Let us consider two top-level classes A and B such that class B needs access to private members of class A and class B is not used by any other class. In such a scenario it makes sense to make B as an inner class of A as given in the above example. By making it an inner class, class B will gain access to all the private members of class A, since B has also become an member of A.
+
+Since inner classes are similar to instance fields, create an instance of an inner class we need to first have an instance of the outer class.
+
+See and retype the below code. Note how we are able to access the private field name inside the method getCompleteName() of the inner class Prefixer.
+
+Also note how the instance of the inner class is created by using the new keyword on an instance of the outer class in the line:
+Namer.Prefixer prefixer = namer.new Prefixer("Mr.");
+
+package q11294;
+public class Namer {
+    private String name;
+    public Namer(String name) {
+        this.name = name;
+    }
+    class Prefixer {
+        private String prefix;
+        private Prefixer(String prefix) {
+            this.prefix = prefix;
+        }
+        public String getCompleteName() {
+            return prefix + " " + name;
+        }
+    }
+    public static void main(String[] args) {
+        Namer namer = new Namer("Doodle");
+        Namer.Prefixer prefixer = namer.new Prefixer("Mr.");
+        System.out.println(prefixer.getCompleteName());
+    }
+}
+
+
+
+
+********************************************* 49.1.2. ********************************************* 
+
+Inner Classes
+
+You are provided with a partial Java program named EvenNumberChecker.
+
+Here's a brief overview of the classes:
+·	The EvenNumberChecker class:
+·	It represents a utility for checking even or odd numbers.
+·	It contains an instance variable to store the number.
+·	It includes a constructor to initialize the number.
+·	You need to define an inner class named EvenCheck inside this class.
+·	The EvenCheck inner class:
+·	It should have a method named isEven() that returns true if the stored number is even, and false otherwise.
+
+Your task is to complete the provided code by defining the inner EvenCheck class and implementing the isEven() method to check whether the given number is even or odd. Use the provided main method to test your implementation by taking input from the user.
+
+import java.util.Scanner;
+public class EvenNumberChecker {
+    private int number;
+    public EvenNumberChecker(int number) {
+        this.number = number;
+    }
+    // Inner class to check if a number is even
+    class EvenCheck {
+        public boolean isEven() {
+            return number % 2 == 0;
+        }
+    }
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int num = scanner.nextInt();
+        EvenNumberChecker evenNumberChecker = new EvenNumberChecker(num);
+        EvenCheck evenCheck = evenNumberChecker.new EvenCheck();
+        if (evenCheck.isEven()) {
+            System.out.println("Even");
+        } else {
+            System.out.println("Odd");
+        }
+        scanner.close();
+    }
+}
+
+
+********************************************* 49.2.1. ********************************************* 
+
+Understanding static nested classes
+
+A nested class marked as static is called a static nested class and not an inner class.
+
+Nested classes which are not declared as static are called inner classes.
+
+For example:
+class A { //this is called a top-level class
+  class B { //this is an inner class
+  }
+  static class C { //this is a nested class
+  }
+}
+In the above code,
+1.	A is called a top-level class
+2.	 B is called an inner class and
+3.	C is called a static nested class
+Note that the static nested class C can only access static members of class A and not A's instance members.
+
+Unlike an inner class where we need an instance of outer class to create an instance of inner class, a static nested class can be directly created using the new keyword.
+
+Algorithm:
+
+·	Define a class A.
+·	Define an inner class B inside A.
+·	In the constructor of class B, print the message "In inner class B's constructor".
+·	Define a static nested class C inside A.
+·	In the constructor of class C, print the message "In static nested class C's constructor".
+·	In the main method:
+o	 a. Create an instance of B by instantiating A and calling new B() on it.
+o	 b. Create an instance of C by calling new A.C().
+Understand the Algorithm and write the code.
+
+Note: A static nested class is almost equal to a top-level class, except that it is always referenced under the context of its outer class.
+
+
+
+class A {
+    class B {
+        B() {
+            System.out.println("In inner class B's constructor");
+        }
+    }
+    static class C {
+        C() {
+            System.out.println("In static nested class C's constructor");
+        }
+    }
+    public static void main(String[] args) {
+        A outer = new A();
+        A.B inner = outer.new B();
+        A.C nested = new A.C();
+    }
+}
+
+
+
+********************************************* 49.2.2. *********************************************
+
+Static Nested classes - Area of the Circle and Rectangle
+
+You are provided with a Java program that defines a MathUtils class with a static nested class Geometry. The Geometry class contains two static methods: circleArea and rectangleArea, which calculates the area of a circle and a rectangle respectively.
+Your task is to implement the missing parts of the Geometry class to correctly calculate the area of a circle and a rectangle.
+
+Note: The code for handling inputs and outputs has been provided to you in the editor.
+
+
+import java.util.Scanner;
+class MathUtils {
+    static class Geometry {
+        // Method to calculate the area of a circle
+        public static double circleArea(double radius) {
+            return Math.PI * radius * radius;
+        }
+        
+        // Method to calculate the area of a rectangle
+        public static double rectangleArea(double length, double width) {
+            return length * width;
+        }
+    }
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        // Input for circle radius
+        double radius = scanner.nextDouble();
+        // Input for rectangle length
+        double length = scanner.nextDouble();
+        // Input for rectangle width
+        double width = scanner.nextDouble();
+        // Calculate area of circle
+        double circleArea = Geometry.circleArea(radius);
+        System.out.println("Area of circle: " + String.format("%.2f", circleArea));
+        // Calculate area of rectangle
+        double rectangleArea = Geometry.rectangleArea(length, width);
+        System.out.println("Area of rectangle: " + String.format("%.2f", rectangleArea));
+
+        scanner.close();
+    }
+}
+
+
+********************************************* 49.2.3. *********************************************
+
+Static nested classes example - II
+
+Create a static nested class named ArrayUtils within the ArrayMain class with the following static methods:
+·	findMax(int[] arr): Returns the maximum element from the input integer array.
+·	findMin(int[] arr): Returns the minimum element from the input integer array.
+
+In the main method of the ArrayMain class, demonstrate the usage of the methods implemented in the nested ArrayUtils class by calling each method with different integer arrays and storing the results.
+
+Note:
+The main method method is provided to you in the editor.
+
+import java.util.Scanner;
+public class ArrayMain {
+    // Static nested class ArrayUtils
+    static class ArrayUtils {
+        // Method to find the maximum element in an array
+        public static int findMax(int[] arr) {
+            int max = arr[0];
+            for (int i = 1; i < arr.length; i++) {
+if (arr[i] > max) {
+    max = arr[i];
+}
+            }
+            return max;
+        }
+        // Method to find the minimum element in an array
+        public static int findMin(int[] arr) {
+            int min = arr[0];
+            for (int i = 1; i < arr.length; i++) {
+if (arr[i] < min) {
+    min = arr[i];
+}
+            }
+            return min;
+        }
+    }
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        // Read the size of the array from the user
+        System.out.print("Size: ");
+        int size = scanner.nextInt();
+        // Initialize the array with the given size
+        int[] array = new int[size];
+        // Read the elements of the array from the user
+        System.out.println("Elements of the array:");
+        for (int i = 0; i < size; i++) {
+            System.out.print("Element " + (i + 1) + ": ");
+            array[i] = scanner.nextInt();
+        }
+        // Call the methods from the ArrayUtils class and display the results
+        System.out.println("Maximum element: " + ArrayUtils.findMax(array));
+        System.out.println("Minimum element: " + ArrayUtils.findMin(array));
+        // Close the scanner
+        scanner.close();
+    }
+}
+
+********************************************* 50.1.1 *********************************************
+
+Understanding local classes
+A nested class which is declared inside a block (between an opening and closing brace) is called a local class.
+
+Inner classes are also local classes. However, to differentiate between inner and local classes, we use the term local class to a class which is declared inside a method or a conditional or a loop block. For example:
+class A { //this is called a top-level class
+  class B { //this is an inner class
+  }
+  static class C { //this is an inner class
+  }
+  public void someMethodInClassA() {
+    class D {
+    }
+  }
+}
+In the above code,
+1.	A is called a top-level class
+2.	 B is called an inner class
+3.	C is called a static nested class and
+4.	D is called a local class
+Local classes can access instance members of their enclosing class.
+
+The visibility of the local class is restricted to the scope of the enclosing block (braces).
+
+Note that local classes cannot have static methods or interfaces as members. We can have fields marked as static provided they are also marked as final (such fields are called as constants).
+
+Observe the partial code in the given editor. Your task is to complete the code in order to execute the code without any errors.
+
+Sample Test Cases
+Test case 1
+In·inner·class·B's·constructor	
+In·static·nested·class·C's·constructor	
+In·local·class·D's·constructor	
+value=7
+  
+
+
+
+package q11296;
+public class A {
+    private int value = 7;
+    class B {
+        private B() {
+            System.out.println("In inner class B's constructor");
+        }
+    }
+    static class C {
+        private C() {
+            System.out.println("In static nested class C's constructor");
+        }
+    }
+    public void someMethodInClassA() {
+        class D {
+            private D() {
+System.out.println("In local class D's constructor");
+System.out.println("value = " + value);
+            }
+        }
+        D d = new D();
+    }
+    public static void main(String[] args) {
+        A a = new A();
+        A.B b = new A().new B();
+        A.C c = new A.C();
+        a.someMethodInClassA();
+    }
+}
+
+********************************************* 50.1.2. ********************************************* 
+
+Local classes example
+Write a Java program that defines a local class Rectangle inside a method that calculates the area of a rectangle. The local class should have two private instance variables: length and width, and a public method calculateArea() that returns the area of the rectangle.
+
+The method to prompt the user for the length and width of the rectangle creates an instance of the local class with the given values and prints the area of the rectangle has been provided to you in the editor.
+
+import java.util.Scanner;
+public class AreaMain {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        // Prompt the user for the length
+        System.out.print("Length: ");
+        double length = scanner.nextDouble();
+        // Prompt the user for the width
+        System.out.print("Width: ");
+        double width = scanner.nextDouble();
+        // Create an instance of the local class Rectangle
+        Rectangle rectangle = new Rectangle(length, width);
+        // Calculate and print the area
+        double area = rectangle.calculateArea();
+        System.out.println("Area: " + area);
+    }
+    // Local class Rectangle
+    private static class Rectangle {
+        private double length;
+        private double width;
+        // Constructor
+        public Rectangle(double length, double width) {
+            this.length = length;
+            this.width = width;
+        }
+        // Calculate the area
+        public double calculateArea() {
+            return length * width;
+        }
+    }
+}
+
+
+********************************************* 50.1.3. ********************************************* 
+
+Local classes example - II
+
+Write a Java program that defines a local class inside a method that calculates the factorial of a given number. The local class should have a private instance variable number, and a public method calculateFactorial() that returns the factorial of the number.
+
+The method to prompt the user for a number, creates an instance of the local class with the given value, and prints the factorial of the number has been provided to you in the editor.
+
+
+import java.util.Scanner;
+import java.math.BigInteger;
+public class FactorialCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        int inputNumber = scanner.nextInt();
+
+        // Method that defines the local class and calculates the factorial
+        calculateAndPrintFactorial(inputNumber);
+
+        scanner.close();
+    }
+    private static void calculateAndPrintFactorial(int number) {
+        // Local class inside the method
+        class Factorial {
+            private int number;
+            public Factorial(int number) {
+this.number = number;
+            }
+            public BigInteger calculateFactorial() {
+BigInteger factorial = BigInteger.ONE;
+for (int i = 1; i <= number; i++) {
+    factorial = factorial.multiply(BigInteger.valueOf(i));
+}
+return factorial;
+            }
+        }
+        // Creating an instance of the local class and using it to calculate the factorial
+        Factorial factorial = new Factorial(number);
+        System.out.println(factorial.calculateFactorial());
+    }
+}
+
+
+
+********************************************* 50.2.1. ********************************************* 
+An anonymous class is very similar to a local class except that an anonymous class combines both the declaration and definition of the class into a single expression statement.
+
+Secondly an anonymous class usually implements an interface or extends a class.
+
+For example the below code shows the difference between an inner class and an anonymous class:
+interface Printer { //this is a top-level interface
+    public void printMe();
+}
+class A {  //this is a normal top-level class
+    public static void main(String[] args) {
+        class PrinterImpl implements Printer { // an example of a normal local class
+            public void printMe() {
+//do something....
+            }
+        }
+
+        Printer myPrinter1 = new PrinterImpl();
+
+        Printer myPrinter2 = new Printer() {// an example of an anonymous class 
+            public void printMe() {
+//do something....
+            }
+        };
+        
+        myPrinter1.printMe();
+        myPrinter2.printMe();
+    }
+}
+In the above code, PrinterImpl is a local class that implements the interface Printer. An instance of this local class is created using the statement:
+Printer myPrinter1 = new PrinterImpl();
+The anonymous class which is initializing the reference myPrinter2 has the below properties:
+Anonymous classes do not have names
+An anonymous class is an expression containing a block of code which is terminated by a semicolon ;
+Anonymous class instantiation is done using the new keyword, just like a constructor invocation
+Anonymous class can either implement an interface and there by provide the implementation for its methods or extend a class and override required methods.
+When an anonymous class is implementing an interface, the new keyword is prefixed to the interface name, that is followed by empty parenthesis.
+When an anonymous class is extending a class, the new keyword is prefixed to one of the existing constructors in that class.
+See and retype the below code.
+
+
+
+interface Printer { //this is a top-level interface
+    public void printMe();
+}
+
+class A {  //this is a normal top-level class
+    public static void main(String[] args) {
+        class PrinterImpl implements Printer { // an example of a normal local class
+            public void printMe() {
+System.out.println("I am in printMe method of the local class PrinterImpl instance");
+            }
+        }
+
+        Printer myPrinter1 = new PrinterImpl();
+
+        Printer myPrinter2 = new Printer() { // an example of an anonymous class 
+            public void printMe() {
+System.out.println("I am in printMe method of the anonymous class");
+            }
+        };
+
+        myPrinter1.printMe();
+        myPrinter2.printMe();
+    }
+}
+
+
+
+
+********************************************* 50.2.2. ********************************************* Anonymous classes from interfaces and classes
+
+See and retype the below code. It has two examples of anonymous classes. One is created by implementing an interface Printer and the other by extending a class named Prefixer.
+
+Note that when an anonymous class is implementing an interface, the new keyword is prefixed to the interface name, which is followed by empty parenthesis.
+
+And note that when an anonymous class is extending a class, the new keyword is prefixed to one of the existing constructors in that class.
+
+
+
+interface Printer {
+    void print(String message);
+}
+
+public class AnonymousExample {
+    public static void main(String[] args) {
+        // Example of anonymous class implementing an interface
+        Printer printer = new Printer() {
+            @Override
+            public void print(String message) {
+System.out.println(message);
+            }
+        };
+        
+        printer.print("printMe is called!");
+        
+        // Example of anonymous class extending a class
+        Prefixer prefixer = new Prefixer("Hello ") {
+            @Override
+            public String getPrefixedName(String name) {
+return prefix+prefix + name;
+            }
+        };
+        
+        System.out.println(prefixer.getPrefixedName("James"));
+    }
+}
+
+abstract class Prefixer {
+    protected String prefix;
+
+    public Prefixer(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public abstract String getPrefixedName(String name);
+}
+********************************************* 50.2.3. ********************************************* 
+
+What an anonymous class can do and cannot do
+
+An anonymous class can:
+1.	have its own fields and custom methods which may not be there in the interface it is implementing or the class it is extending
+2.	access members of its enclosing class
+3.	have static fields provided they are also marked as final
+4.	have local classes
+An anonymous class cannot:
+1.	be reused. They are just like expressions, whose complete implementation is provided in the accompanying code block.
+2.	access non-final local variables that are declared in its enclosing block
+3.	have static methods or interfaces
+Select all the correct statements from the below code:
+interface Printer {
+  public void printMe();
+}
+class Prefixer {
+  protected String prefix;
+  public Prefixer(String prefix) {
+    this.prefix = prefix;
+  }
+  public String getPrefixedName(String name) {
+    return prefix + " " + name;
+  }
+}
+class AnonymousExample {
+  public static void main(String[] args) {
+    Printer printer = new Printer(String text) { // statement 1
+      this.text = text; // statement 2
+      public void printMe() {
+        System.out.println("printMe is called!");
+      }
+      public static void printMe2() { // statement 3
+        System.out.println("printMe2 is called!");
+      }
+    };
+    Prefixer doublePrefixer = new Prefixer("Hello") { // statement 4
+      public String getOnlyPrefix() { // statement 5
+        return prefix;
+      }
+      public String getPrefixedName(String name) {
+        return prefix + " " + prefix + " " + name;
+      }
+    };
+    printer.printMe();
+    System.out.println(doublePrefixer.getPrefixedName("James"));
+  }
+}
+·	
+·	
+·	
+·	Statements 1 and 2 will result in compilation errors.
+·	
+
+
+
+********************************************* 51.1.1 *********************************************
+
+Functional Interface - I
+Functional Interface:
+
+In Java, a functional interface is an interface that has a single abstract method. It can have multiple default and static methods, but it must have exactly one abstract method. This single abstract method is what makes the interface "functional" and allows it to be implemented using lambda expressions or method references.
+
+The main purpose of functional interfaces is to support lambda expressions and enable functional programming in Java. Lambda expressions provide a concise way to represent instances of functional interfaces, making the code more readable and expressive.
+
+Here are some key points about functional interfaces in Java:
+1.	Single Abstract Method: A functional interface must have exactly one abstract method. This abstract method is the one that will be implemented by the lambda expression or method reference.
+2.	@FunctionalInterface Annotation: Although not mandatory, it is recommended to annotate functional interfaces with @FunctionalInterface. This annotation serves as a compiler check to ensure that the interface has only one abstract method. If there is more than one abstract method, the compiler will throw an error.
+3.	Default and Static Methods: Functional interfaces can have default and static methods in addition to the single abstract method. These methods can provide default implementations or helper methods related to the interface's purpose.
+4.	Lambda Expression Compatible: Functional interfaces are designed to be implemented using lambda expressions. Lambda expressions provide a concise syntax for defining the implementation of the abstract method.
+5.	Method Reference Compatible: In addition to lambda expressions, functional interfaces can also be implemented using method references. Method references provide a compact way to refer to existing methods, either static or instance methods.
+6.	Built-in Functional Interfaces: Java provides several built-in functional interfaces in the java.util.function package, such as Predicate, Consumer, Function, Supplier, and others. These interfaces are commonly used in functional programming scenarios, such as working with streams, collections, and event handling.
+7.	Custom Functional Interfaces: Developers can define their custom functional interfaces for specific use cases in their applications.
+
+Functional interfaces and lambda expressions are core features of Java 8 and later versions, enabling a more functional programming style and promoting code readability, conciseness, and modularity. They are widely used in various Java frameworks and libraries, such as Java Streams, Java Collections, and event-driven programming.
+
+In addition to the single abstract method, what else can a functional interface have?
+
+
+
+·	Both default and static methods
+
+
+
+
+********************************************* 51.1.2.********************************************* 
+
+Functional interface and Lambda Expressions
+In Java, lambda expressions are used to provide an implementation of a functional interface. A functional interface is an interface that has a single abstract method. Lambda expressions provide a concise way to represent an instance of a functional interface.
+
+In Java, lambda expression is treated as a function, so the compiler does not create a.class file.
+
+Here's an example of how to implement a user-defined functional interface using a lambda expression:
+// Define a functional interface
+@FunctionalInterface
+interface Operation {
+    int perform(int a, int b);
+}
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        // Implement the functional interface using a lambda expression
+        Operation addition = (a, b) -> a + b;
+        Operation multiplication = (a, b) -> a * b;
+
+        // Use the lambda expressions
+        int result1 = addition.perform(5, 3); // result1 = 8
+        int result2 = multiplication.perform(5, 3); // result2 = 15
+
+        System.out.println("Result 1: " + result1);
+        System.out.println("Result 2: " + result2);
+    }
+}
+
+In this example, we define a functional interface called Operation with a single abstract method perform that takes two integers as input and returns an integer.
+
+In the main method, we create two lambda expressions addition and multiplication that implement the Operation interface. The lambda expression (a, b) -> a + b represents an instance of the Operation interface that adds two numbers, and (a, b) -> a * b represents an instance that multiplies two numbers.
+We then use these lambda expressions by calling the perform method on them, passing in the desired arguments.
+
+Lambda expressions are particularly useful when working with functional programming concepts such as streams, collections, and event handling. They provide a concise and readable way to represent anonymous functions, making the code more expressive and easier to maintain.
+
+Task:
+
+In the main method, we created two lambda expressions subtraction and division that implement the CalculateOperation interface. These lambda expressions define the behavior of the calculate method for subtraction and division operations, respectively.
+We then called the calculate method on these lambda expressions, passing in the desired arguments, and storing the results in subtractionresult anddivisionresult.
+
+Your task is to implement the functional interface CalculateOperation.
+
+import java.util.Scanner;
+@FunctionalInterface
+interface CalculateOperation {
+    double calculate(double a, double b);
+}
+public class CalculateMain {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        // Get input from the user
+        System.out.print("First number: ");
+        double firstNumber = scanner.nextDouble();
+        System.out.print("Second number: ");
+        double secondNumber = scanner.nextDouble();
+
+        // Implement the functional interface using lambda expressions
+        CalculateOperation subtraction = (a, b) -> a - b;
+        CalculateOperation division = (a, b) -> {
+            if (b != 0) {
+return a / b;
+            } else {
+throw new ArithmeticException("Division by zero!");
+            }
+        };
+
+        // Use the lambda expressions
+        double subtractionResult = subtraction.calculate(firstNumber, secondNumber);
+        double divisionResult = division.calculate(firstNumber, secondNumber);
+
+        // Print the results
+        System.out.println("Subtraction Result: " + subtractionResult);
+        System.out.println("Division Result: " + divisionResult);
+
+        scanner.close();
+    }
+}
+
+
+
+********************************************* 51.1.3. ********************************************* 
+
+Functional Interface - II
+The main method has been provided to you in the editor. Inside the main method of the class SquareNumber, the program takes user input for a number, creates a lambda expression to square the input number and prints the squared number to the console.
+
+Implement a functional interface with a single abstract method that takes an int parameter and returns an int.
+
+Note:
+Refer to the displayed test cases for input and output formats.
+
+
+import java.util.Scanner;
+// Functional interface with a single abstract method
+interface IntOperation {
+    int operate(int x);
+}
+public class SquareNumber {
+    public static void main(String[] args) {
+        // Creating a Scanner object to take input from the user
+        Scanner scanner = new Scanner(System.in);
+        // Taking user input for a number
+        int number = scanner.nextInt();
+        // Creating a lambda expression to square the input number
+        IntOperation square = (x) -> x * x;
+        // Applying the lambda expression to square the input number
+        int squaredNumber = square.operate(number);
+        // Printing the squared number to the console
+        System.out.println(squaredNumber);
+        // Closing the Scanner object
+        scanner.close();
+    }
+}
+
+
+********************************************* 52.1.1*********************************************
+
+Lambda expressions
+
+Lambda expressions:
+
+Lambda expressions, introduced in Java 8, provide a concise syntax for representing instances of functional interfaces. They enable functional programming and allow developers to write more expressive and readable code.
+
+The syntax of a lambda expression is:
+(parameters) -> { statements; }
+Here's a breakdown of the lambda expression syntax:
+·	Parameters: The parameters are defined within parentheses (). If there is only one parameter, the parentheses are optional. For example:
+·	(int x, int y) - Two parameters of type intx - One parameter without specifying the type (type inference)
+·	Arrow Token: The arrow token -> separates the parameters from the lambda body.
+·	Lambda Body: The lambda body represents implementing the functional interface's abstract method. It can be either an expression or a block of code enclosed in curly braces {}.
+·	Expression Body: If the lambda body is a single expression, the curly braces can be omitted, and the expression is evaluated and returned. For example: (x, y) -> x + y
+·	Block Body: If the lambda body requires multiple statements, it must be enclosed in curly braces. For example:
+(x, y) -> {
+    int sum = x + y;
+    return sum;
+}
+Here are some examples of lambda expressions:
+
+Simple Lambda Expression:
+Runnable runnable = () -> System.out.println("Hello, Lambda!");
+runnable.run(); // Output: Hello, Lambda!
+In this example, the lambda expression () -> System.out.println("Hello, Lambda!") implements the run() method of the Runnable functional interface.
+
+Lambda Expression with Parameters:
+IntBinaryOperator add = (x, y) -> x + y;
+int result = add.applyAsInt(2, 3); // result = 5
+Here, the lambda expression (x, y) -> x + y implements the applyAsInt(int, int) method of the IntBinaryOperator functional interface, representing an addition operation.
+
+Lambda Expression with Block Body:
+Predicate isLongString = str -> {
+    int length = str.length();
+    return length > 10;
+};
+boolean isLong = isLongString.test("Hello, World!"); // isLong = false
+In this example, the lambda expression uses a block body to implement the test(T) method of the Predicate functional interface, which checks if a string is longer than 10 characters.
+
+Lambda expressions can be used wherever an instance of a functional interface is required, such as in method arguments, variable assignments, or method returns. They promote a more functional programming style, making the code more concise, readable, and expressive.
+
+Lambda expressions are often used in conjunction with Java streams, collections, and event handling, providing a powerful and flexible way to work with data and implement behavior.
+
+Here is a simple task for you to understand the concept of lambda expressions.
+
+The functional interface called Calculator with an abstract method calculate(int a, int b) that takes two integers and returns an integer has been given to you.
+·	Create a lambda expression to implement the Calculator interface for the addition operation.
+·	Invoke the calculate method using the lambda expressions.
+Note:
+The code for handling inputs and output has been provided to yo.
+
+
+import java.util.Scanner;
+// Calculator interface
+interface Calculator {
+    int calculate(int a, int b);
+}
+
+public class CalculatorExample {
+    public static void main(String[] args) {
+        // Create Scanner object for user input
+        Scanner scanner = new Scanner(System.in);
+
+        // Lambda expression for addition operation
+        Calculator addition = (a, b) -> a + b;
+
+        // Take input from user
+       
+        int input1 = scanner.nextInt();
+        
+        int input2 = scanner.nextInt();
+
+        // Close the Scanner
+        scanner.close();
+
+        // Calculate the result using the lambda expression
+        int result = addition.calculate(input1, input2);
+
+        // Output
+        System.out.println("Addition: " + result);
+    }
+}
+
+
+*********************************************  52.1.2. *********************************************  Lambda expressions - print all odd elements
+
+Complete the code in LambdaExpression.java file to print all odd elements in the array list using concept of lambda expression
+
+
+import java.util.ArrayList;
+public class LambdaExpression {
+    public static void main(String[] args) {
+        // Creating an ArrayList
+        ArrayList numbers = new ArrayList<>();
+        // Adding elements to the ArrayList
+        numbers.add(120);
+        numbers.add(303);
+        numbers.add(308);
+        numbers.add(555);
+        
+        // Printing the original ArrayList
+        
+        for (Integer number : numbers) {
+            System.out.println(number);
+        }
+        
+        // Using lambda expression to print all odd elements
+        System.out.println("All odd elements displayed:");
+        boolean oddFound = false;
+        for (Integer number : numbers) {
+            if (number % 2 != 0) {
+System.out.println(number);
+oddFound = true;
+            }
+        }
+        if (!oddFound) {
+            System.out.println("Empty");
+        }
+    }
+}
+
+
+
+********************************************* 52.1.3. ********************************************* 
+
+String Transformer - Lambda expressions
+
+Your task is to :
+·	Define a functional interface called StringTransformer with an abstract method transform(String str) that takes a string and returns a transformed string.
+·	Implement the StringTransformer interface using a lambda expression to convert a string to uppercase.
+
+Note:
+The code for handling input and output has been provided to you in the editor.
+
+
+import java.util.Scanner;
+@FunctionalInterface
+interface StringTransformer {
+    String transform(String str);
+}
+public class StringMain {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        // Implementation using lambda expression to convert string to uppercase
+        StringTransformer uppercaseTransformer = str -> str.toUpperCase();
+        // Take input from the user
+        String input = scanner.nextLine();
+
+        // Transform the input string to uppercase
+        String transformed = uppercaseTransformer.transform(input);
+        // Output the transformed string
+        System.out.println(transformed);
+        scanner.close();
+    }
+}
+
+
+*********************************************  53.1.1*********************************************
+
+Understanding final variables/references
+
+In Java, we can classify variables or references into 5 different types:
+1.	Parameters - these are the variables/references that appear in a method signature inside the parenthesis ().
+2.	Local variables/references - the variables/references that are declared inside a method are called local variables. Their scope/visibility is restricted only to their enclosing method block.
+3.	Instance fields - these are the fields declared in the class. They hold the state information of the class. Every instance of the class holds a copy of these fields.
+4.	Static fields - these are the fields declared in the class with a static keyword. Only one copy of such fields exists in memory and are shared by (or available to) all the instances of that class.
+5.	Constants - these are the variables/references declared in the class with both static and final keywords. Only one copy of such fields exist in memory like the static fields. However, these variables/references cannot be reassigned another value once they have been assigned a value.
+Note:If a variable is only declared as final and not static, then it is not called a constant. It is simply called a final variable.
+
+Select all the correct statements from the below code:
+public class A {
+  private int value1; // statement 1
+  private final int value2; // statement 2
+  private static int value3; // statement 3
+  private static final int value4; // statement 4
+}
+
+·	value4 declared in statement 4 is called a constant.
+
+
+
+
+*********************************************  53.1.2. ********************************************* 
+
+Understanding final variables/references
+·	Imagine a variable or a reference to be a cup (something like a coffee cup ).
+
+We have 2 types of cups. We will call the cups which are of type primitive as variables and the cups which are of type classes or arrays as references.
+
+
+
+
+·	Statement 4 will not result in a compilation error, since field comments is not declared as final.
+
+  Statement 6 will result in a compilation error.
+
+
+53.2.1. Understanding final methods
+
+In Java, a final method is a method that cannot be overridden by subclasses. When a method is declared as final, its implementation is fixed, and any attempt to override it in a subclass will result in a compile-time error.
+
+There are two main use cases for declaring a method as final:
+1.	Preventing Overriding: When a method is marked as final, it is a clear indication that the method's implementation should not be changed or overridden in subclasses. This can be useful when you want to ensure that a particular behavior remains constant throughout the inheritance hierarchy.
+2.	Performance Optimization: The Java compiler can apply certain optimizations to final methods because it knows that the method cannot be overridden. This can lead to improved performance, especially for frequently called methods.
+
+Here are some key points about final methods:
+·	final methods can be present in both final and non-final classes.
+·	A final method cannot be overridden, but it can be inherited by subclasses.
+·	Constructors cannot be marked as final because they cannot be inherited or overridden.
+·	private methods are implicitly final because they cannot be overridden by subclasses.
+·	static methods cannot be overridden because they are associated with the class, not the instance. However, they can be marked as final for performance optimization purposes.
+
+We have many final methods in the Object class. For example below code displays one of them:
+public class Object {
+  ...
+  ...
+  public final void wait() throws InterruptedException {
+    wait(0);
+  }
+  ...
+}
+Select all the correct statements from the below code:
+public class A {
+  public void method1() { /*do something */ }		// statement 1
+  public final void method2() { /*do something */ }	// statement 2
+  public void method3() { /*do something */ }		// statement 3
+}
+public class B extends A {
+  public void method1() { /*do something else */ }	// statement 4
+  public void method2() { /*do something else */ }	// statement 5
+  public final void method3() { /*do something else */ }	// statement 6
+}
+·	
+·	
+·	method1 of class A in statement 1 is overridden in class B in statement 4.
+
+
+********************************************* 54.1.1*********************************************
+
+
+Understanding final class
+01:13
+In Java, a final class is a class that cannot be inherited or extended by other classes. When a class is declared as final, it becomes a sealed class, meaning that its definition cannot be altered by creating subclasses. The final keyword is used to restrict the class from being subclassed.
+Here are some key points about final classes:
+1.	Inheritance Restriction: When a class is declared as final, it cannot be extended or subclassed. Any attempt to create a subclass of a final class will result in a compile-time error.
+2.	Preventing Overriding: Methods in a final class cannot be overridden by subclasses, as there can be no subclasses of a final class.
+3.	Efficiency: final classes can sometimes provide better performance than non-final classes because the Java compiler can apply certain optimizations when it knows that a class cannot be extended.
+4.	Security: final classes can be used to create immutable classes, which can help ensure thread safety and prevent unintended modifications to class behavior.
+5.	Common Use Cases: final classes are often used for utility classes, such as java.lang.Math, java.lang.String, and java.lang.System, which are not meant to be extended.
+
+Here's an example of a final class:
+
+public final class FinalClass {
+    private final int value;
+
+    public FinalClass(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
+}
+
+// Attempting to extend a final class will result in a compile-time error
+// class SubClass extends FinalClass { // Compile-time error
+//     // ...
+// }
+
+In this example, the FinalClass is declared as final. It has a final instance variable value that is initialized in the constructor. The getValue() method is provided to retrieve the value.
+
+The commented section demonstrates that attempting to create a subclass of FinalClass will result in a compile-time error because final classes cannot be extended.
+
+final classes are often used in situations where the class is not intended to be subclassed, such as utility classes or classes that provide a specific, immutable implementation. However, it's important to use final classes judiciously, as they can limit the flexibility and extensibility of the code.
+
+In Java, we have many final classes, like the String and all the wrapper classes like Integer, Float, etc.
+
+Select all the correct statements given below:
+
+class A {} // statement 1
+·	final class B extends A {} // statement 2
+
+
+Statement 2 will result in a compilation error. Since class A is not marked as final, class B which extends class A, cannot mark itself as final.
+
+
+·	Object class declared in java.lang package, is a good example of final class.
+
+·	Below is a valid code:
+
+·	public final interface A {}
+
+
+
+We declare a class as final, when we do not want someone to change its implementation by subclassing it.
+
+
+
+*********************************************  54.1.2. ********************************************* 
+
+
+Final class example
+
+Write a Java program that creates a final class called ImmutablePoint to represent a point in a 2D plane. The class should have two final instance variables x and y to store the coordinates of the point.
+Implement the following:
+1.	A constructor ImmutablePoint(double x, double y) that initializes the x and y coordinates.
+2.	Getter methods getX() and getY() to retrieve the values of x and y, respectively.
+3.	A method calculateDistance(ImmutablePoint other) that takes another ImmutablePoint object as input and calculates the Euclidean distance between the current point and the given point using the formula sqrt((x2 - x1)^2 + (y2 - y1)^2).
+
+Note:
+The main method has been provided to you in the editor.
+
+
+import java.util.Scanner;
+public final class ImmutablePoint {
+    private final double x;
+    private final double y;
+    public ImmutablePoint(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+    public double getX() {
+        return x;
+    }
+    public double getY() {
+        return y;
+    }
+    public double calculateDistance(ImmutablePoint other) {
+        return Math.sqrt(Math.pow(other.x - this.x, 2) + Math.pow(other.y - this.y, 2));
+    }
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        // Taking input for the first point
+        System.out.print("x-coordinate for first point: ");
+        double x1 = scanner.nextDouble();
+        System.out.print("y-coordinate for first point: ");
+        double y1 = scanner.nextDouble();
+        ImmutablePoint firstPoint = new ImmutablePoint(x1, y1);
+
+        // Taking input for the second point
+        System.out.print("x-coordinate for second point: ");
+        double x2 = scanner.nextDouble();
+        System.out.print("y-coordinate for second point: ");
+        double y2 = scanner.nextDouble();
+        ImmutablePoint secondPoint = new ImmutablePoint(x2, y2);
+        // Calculating and printing the distance
+        System.out.println("Distance: " + firstPoint.calculateDistance(secondPoint));
+        scanner.close();
+    }
+}
+
+
+********************************************* 54.2.1. ********************************************* Understanding final keyword
+Select all the correct statements from the below code:
+public final class A {
+  public void m1() {				// statement 1
+    ...
+  }
+}
+public class B extends A {				// statement 2
+}
+public class C {
+  public void m2() {
+    ...
+  }
+}
+public class D extends C {
+  public final void m2() {			// statement 3
+    final int value = 2;
+    final int[] valueArr = {2, 3, 4};
+    final String text1 = "Cat on the wall";
+    String text2 = text1;			// statement 4
+    String text3 =  "Dog in the pool";
+    text1 = text3;				// statement 5
+    valueArr[1] = value;			// statement 6
+  }
+}
+·	
+·	
+·	
+·	In statement 2, will result in compilation error. Since class A is declared as final it cannot be extended by class B.
+·	
+·	Statement 5 will result in a compilation error.
+
+
+********************************************* 55.1.1*********************************************Understanding garbage collection
+
+In memory management terminology, garbage means that portion of memory which was once occupied by objects and is currently no longer used by the program.
+
+Garbage collection (GC) means reclaiming such memory so that, that space can be used for allocation to other objects.
+
+In Java programming language, the JVM (Java Virtual Machine) which is responsible for running the Java application performs automatic garbage collections.
+
+The automatic garbage collection in Java is performed by a special thread called Garbage Collector, which is a part of JVM.
+
+Garbage Collector does not reclaim the memory of objects that are still in use. It only reclaims the memory of objects which are no longer in use.
+
+An object is created and assigned memory when we use the new keyword followed by a constructor call.
+
+The reference  holds the address of the object in the memory.
+
+That portion of memory in which the Java objects reside is called heap.
+
+When the program no longer uses an object, such an object is called unreferenced object.
+
+For example:
+public class A {
+  private String text1 = "Bali Islands";		// statement 1
+  public String haveSomeFun() {
+    String text2 = "Fly to " + text1;	// statement 2
+    System.out.println(text2);		// statement 3
+  }
+}
+public class ATest {
+  public static void main(String[] args) {
+    A a = new A();				// statement 4
+    a.haveSomeFun();			// statement 5
+    System.out.println("Happy holidays!");	// statement 6
+  }
+}
+In the above code, after statement 4 is executed, we have reference a pointing to an object created in the heap.
+
+Similarly, inside the instance pointed by a, we have another reference text1 (which is declared in statement 1) also pointing to a String object in memory.
+
+However, note that the object referenced by text2 declared in the statement 2 is not yet created in memory.
+
+The reference text2 will become alive only during the execution of the method invocation on reference a in statement 5.
+
+After executing the statement 5, when the JVM is executing statement 6, the reference text2, whose scope was local to the method haveSomeFun() is no longer alive even though the object is in the memory. Such objects are called unreferenced objects.
+
+Garbage collector identifies such objects (which are there in memory but are no longer referenced) and reclaims their memory.
+
+Select all the correct statement given below.
+
+
+·	Object a1 = new Object(); //statement 1
+·	Object a2 = new Object(); //statement 2
+·	a2 = a1;
+
+
+
+
+
+********************************************* 55.2.1.*********************************************  Understanding constructors and finalize method
+
+In Java, the constructors are used to prepare a newly created object for use by initilaizing values passed to it as parameters.
+
+Similarly, when the GC (Garbage Collector) decides to remove an object from memory, it calls the finalize() method on the object.
+
+The finalize() method is declared in the Object class. Hence it is available in every class.
+
+The default finalize() method available in the Object class does not do anything.
+
+A Java class can override and provide its special implementation in the finalize() method.
+
+Normally we do not override finalize to provide any special implementation. However, it is good to know that we do not call the finalize() method, it is the GC which calls it.
+
+
+·	GC (Garbage Collector Thread) automatically calls the finalize method of the object whenever it is trying to reclaim the memory occupied by the object.
+
+********************************************* 56.1.1*********************************************Understanding System class
+
+Among the various classes available in java.lang package, System is one of the most commonly used classes after String.
+
+The System class can neither be instantiated (since it has a private constructor) nor can be extended (since it is declared as final).
+
+System class has three important public static fields:
+1.	out - is accessed as System.out. This out field is of type PrintStream. The out refers to the standard output stream.
+2.	err - is accessed as System.err. This err field is of type PrintStream. The err refers to the standard error stream.
+3.	in - is accessed as System.in. This in field is of type InputStream. The in refers to the standard input stream.
+The System class provides a method called System.console(), which returns the java.io.Console object associated with the running Java process (Java Virtual Machine). Select all the correct statement given below.
+·	
+
+
+
+In the statement
+·	System.out.println(“Uranus");
+·	println is a method.
+
+
+
+********************************************* 56.1.2. ********************************************* Common methods in System class
+
+Select all the correct statements for some of the common methods in System class. [Hint: Make sure to click on the method names and read the method documentation before you mark the answers]
+
+1.currentTimeMillis() is a static method in System class. So we can directly call the method on the class name, as given below:
+System.currentTimeMillis();
+
+
+2.The currentTimeMillis() method in System class returns a long value representing the total time elapsed from the midnight of January 1, 1970 UTC until the current system time.
+
+3.The currentTimeMillis() method in System class returns a long value with precision upto nanoseconds. We can use this method when we want to measure time difference between two events to the precision of nanoseconds.
+
+
+4.int[] sourceArr = {1, 3, 5, 7, 9};
+int[] destinationArr = new int[5];
+System.arraycopy(sourceArr, 1, destinationArr, 1, 2);
+After the arraycopy method invocation, the values in destinationArr array will be {0, 3, 5, 0, 0}
+
+
+
+
+********************************************* 56.2.1. ********************************************* Understanding println method
+
+Select all the correct statements for the below code:
+public class Demo {
+  public static void main(String[] args) {
+    System.out.print("Up ");
+    System.out.print("up");
+    System.out.print(" and away!");
+  }
+}
+
+
+·	The output will be as given below:
+Up up and away!
+
+
+
+
+********************************************* 57.1.1*********************************************Understanding Date and Time classes
+
+The central classes in Java for working with Date and Time are Date, DateFormat and Calendar.
+
+Date and Calendar classes are present in java.util package, while DateFormat is present in java.text package.
+
+Starting with Java version 8, many new classes and enhancements were introduced for handling date and time, these are bundled in a new package named java.time.
+
+We will learn about the new classes introduced in Java version 8 later.
+
+Since a lot of code written before Java 8, heavily use Date, DateFormat and Calendar classes, we will first learn about them.
+1.	Date - represents an instance in time (stored as a primitive long). For example this moment. Though the name might suggest that it represents only a calendar date, like 7th July 1977, we should also remember that it actually has the time component to the precision of a millisecond.
+2.	DateFormat - provides the formating for dates and times on an given Locale
+3.	Calendar - provides methods to work with the instance of time represented by Date.
+It is important to note that earlier Unix systems used a 32-bit signed integer to store time. They started counting time with the value 0 representing 1970-1-1 00:00:00. This is referred as the epoch time.
+
+The time component represented by the Date object counts the milliseconds passed from the above mentioned epoch time.
+
+
+package q11315;
+import java.util.*;
+public class DateDemo {
+  public static void main(String ... args) {
+    Date thisMoment = new Date();
+    long millisecondsSinceEpochStart = thisMoment.getTime();
+    System.out.println("This Moment : " + thisMoment);
+    System.out.println("Total milli seconds from epoch to this moment : " + millisecondsSinceEpochStart);
+  }
+}
+
+Observe the above code and predict the output.
+
+Note: Please don't change the package name.
+
+·	This Moment : [Current Date and Time]
+·	Total milli seconds from epoch to this moment : [Milliseconds since epoch]
+
+
+********************************************* 57.1.2. ********************************************* Understanding Date class
+The Date class is a simple wrapper over an instance of time, represented as a long, just like the Integer class is a wrapper over an int value.
+
+A Date object can be created using one of the below two constructors:
+1.	Date() - creates a new instance of Date object which represents the time at which it is created.
+2.	Date(long time) - creates a new instance of Date object which represents the specified number of milliseconds specified by the variable time, starting from the "the epoch", namely January 1, 1970, 00:00:00 GMT
+The various methods in the Date class like getDay(), getHour(), getYear() etc., are all deprecated and should not be used.
+
+We should instead use their alternatives provided in the Calendar class. We will learn more about the Calendar class later.
+
+Date class has one useful method called getTime() which returns the number of milliseconds starting from January 1, 1970, 00:00:00 GMT represented by a date object as a long.
+
+Note: System class also has a method called System.currentTimeMillis() which will return the current time as milliseconds from the epoch time (January 1, 1970, 00:00:00 GMT) as a long value.
+
+Complete the code in the given editor by following the comment lines.
+
+Note: Please don't change the package name.
+
+
+import java.util.Date;
+public class DateExample {
+    public static void main(String[] args) {
+        // Create a new Date object representing the current time
+        Date currentDate = new Date();
+        // Get the current time in milliseconds
+        long currentTime = currentDate.getTime();
+        // Sleep for 1 second
+        System.out.println("Sleeping for 1 second...");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("This thread resumed after 1 or more seconds");
+   }
+}
+
+
+
+
+********************************************* 57.1.3. ********************************************* Understanding DateFormat class
+
+DateFormat is an abstract class which provides methods for parsing text to Date objects and formating Date objects to text.
+
+DateFormat class has static methods to create instance of DateFormat objects.
+DateFormat df1 = DateFormat.getInstance(); 
+// the above code creates a date and time formatter instance which uses the SHORT style
+
+DateFormat df2 = DateFormat.getDateInstance(); 
+// the above line creates a date foramatter instance with system's Locale  
+
+DateFormat df3 = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE);
+// the above line creates a date formatter instance with French Locale in long format
+A Locale object represents a specific geographical, political, or cultural region and their attributes. For example, the month August is called August in English and Août in French.
+
+The Locale class allows for displaying numbers, currencies, date and time information according to user's native language, country and cultural settings.
+
+SimpleDateFormat is one of the most useful implementation sub-class of DateFormat class.
+
+Note that the formatting classes like DateFormat and SimpleDateFormat are present in the java.text package.
+
+
+Write a class named DateFormatInJapan with a static method getJapaneseShortDate(). The method should accept one parameter of type Date. It should return a formatted date as String from the passed parameter using JAPAN locale in SHORT format.
+
+Sample Output:
+Oct 2, 1869 in Japan is: 1869/10/02
+
+
+Note: Please don't change the package name.
+
+
+
+import java.util.*;
+import java.text.*;
+public class DateFormatInJapan {
+    public static String getJapaneseShortDate(Date date) {
+        Locale japanLocale = Locale.JAPAN;
+        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, japanLocale);
+        return df.format(date);
+    }
+    public static void main(String[] args) {
+        // Sample Test Case
+        int year = Integer.parseInt(args[0]);
+        int month = Integer.parseInt(args[1]) - 1; // Month in Calendar starts from 0
+        int day = Integer.parseInt(args[2]);
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, day);
+        Date date = cal.getTime();
+        String formattedDate = getJapaneseShortDate(date);
+        System.out.println("Oct 2, 1869 in Japan is: " + formattedDate);
+    }
+}
+
+********************************************* 57.1.4. ********************************************* Understanding SimpleDateFormat class
+
+SimpleDateFormat is a concrete implementation of the abstract class DateFormat.
+
+An instance of SimpleDateFormat class can be created using one of the below four constructors:
+1.	SimpleDateFormat() - creates default SimpleDateFormat object with default locale.
+2.	SimpleDateFormat(String pattern) - creates a SimpleDateFormat object with the given pattern.
+3.	SimpleDateFormat(String pattern, DateFormatSymbols formatSymbols) - creates a SimpleDateFormat object with the given pattern and custom date format symbols.
+4.	SimpleDateFormat(String pattern, Locale locale) - creates a SimpleDateFormat object with the given pattern and locale.
+The pattern string is a sequence of characters which have special meanings. Click here to view all the pattern characters with their meanings under the section titled Date and Time Patterns.
+
+After a SimpleDateFormat object is created applyPattern(String pattern) method can be used to modify the pattern.
+
+Below are the two important methods of DateFormat that can be called on a SimpleDateFormat instance:
+1.	format(Date date) - formats the Date object as text.
+2.	parse(String dateText) - creates a Date object by parsing the dateText.
+
+
+Note that if text has to be included as it is in the pattern, the text has to be surrounded in single quotes.
+
+Write a class with name SimpleDateFormateDemo. In the main method create a Date object by parsing the given dateText 15-08-1947 and print the same.
+
+The output should be
+parsedDate : Fri Aug 15 00:00:00 GMT 1947
+
+
+Note: Please don't change the package name.
+
+package q11399;
+import java.util.*;
+import java.text.*;
+public class SimpleDateFormatDemo {
+    public static void main(String ... args) throws ParseException {
+        String dateText = " ";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        // parse the dateText here and print.
+        Date Nashe = simpleDateFormat.parse("15-08-1947");
+        System.out.println("parsedDate : "+ Nashe);
+    }
+}
+
+********************************************* 57.1.5. ********************************************* Choose the correct code
+Given :
+import java.util.Date;
+import java.text.DateFormat;
+
+DateFormat df;
+Date date = new Date();
+// insert code here
+String s = df.format(date);
+Which code fragment, inserted at // insert code here, allows the code to compile?
+
+[Hint: Click on Date and DateFormat to explore the methods.]
+
+·	df = DateFormat.getInstance();
+
+57.1.6. Understanding classes in java.time package
+
+The java.time package introduced in Java 8 contains many new classes apart from replacements for the existing Date, DateFormat and Calendar classes.
+
+For a complete list of new classes in java.time package click here.
+
+Below are list of a few important classes:
+1.	Instant - represents a moment on the time-scale. Unlike the java.util.Date which measures till milliseconds, an Instant records even nanoseconds.
+2.	LocalDate - represents a date without the time component
+3.	LocalTime - represents a time without the date component
+4.	LocalDateTime - represents an object with both date and time components
+5.	ZonedDateTime - represents a complete date-time object with time-zone
+
+Complete the code in the given editor by following the comment lines.
+
+Note: Please don't change the package name.
+
+package q11592;
+import java.time.*;
+import java.time.temporal.*;
+public class LocalDateDemo {
+    public static void main(String ... args) {
+        LocalDate javaBirthday = LocalDate.of(1995, Month.MAY, 23);
+        TemporalAdjuster adjuster = TemporalAdjusters.next(DayOfWeek.SUNDAY);
+        LocalDate nextSunday = javaBirthday.with(adjuster);
+        System.out.printf("Java's birthday was on %s, and the cake was cut on next Sunday : %s.%n", javaBirthday, nextSunday);
+    }
+}
+
+
+********************************************* 57.1.7. ********************************************* LocalDate, LocalTime and LocalDateTime classes
+
+Let's discuss the details of LocalDate and LocalTime classes from java.time package:
+
+1. LocalDate:
+The LocalDate class represents a date without a time component in the ISO-8601 calendar system. It is an immutable class, meaning that once an instance is created, its value cannot be changed. Here are some key points about LocalDate:
+·	It represents a date in the year-month-day format (yyyy-MM-dd).
+·	It provides methods for retrieving individual components of the date, such as getYear(), getMonthValue(), and getDayOfMonth().
+·	You can create a LocalDate instance using static factory methods like LocalDate.now() (for the current date), LocalDate.of(year, month, day), or LocalDate.parse(dateString, formatter).
+·	LocalDate instances can be compared using relational operators like isBefore(), isAfter(), and equals().
+·	You can perform date calculations like adding or subtracting days, months, or years using methods like plusDays(), minusMonths(), and withYear().
+·	LocalDate instances do not store time zone information and represent a date in the ISO calendar system, which is a proleptic Gregorian calendar.
+
+2. LocalTime:
+The LocalTime class represents a time without a date component. It is also an immutable class. Here are some key points about LocalTime:
+·	It represents a time in the hour-minute-second-nanosecond format (HH:mm:ss.nnnnnnnnn).
+·	It provides methods for retrieving individual components of the time, such as getHour(), getMinute(), and getSecond().
+·	You can create a LocalTime instance using static factory methods like LocalTime.now() (for the current time), LocalTime.of(hour, minute, second, nanosecond), or LocalTime.parse(timeString, formatter).
+·	LocalTime instances can be compared using relational operators like isBefore(), isAfter(), and equals().
+·	You can perform time calculations like adding or subtracting hours, minutes, seconds, or nanoseconds using methods like plusHours(), minusMinutes(), and withSecond().
+·	LocalTime instances do not store time zone information and represent a time in the context of a 24-hour clock.
+
+Both LocalDate and LocalTime classes are designed to be simple and efficient when dealing with dates and times in a local context, without the need for time zone information. However, if you need to represent a date and time with a time zone, you should use the ZonedDateTime or OffsetDateTime classes.
+
+Here's an example demonstrating the usage of LocalDate and LocalTime:
+// Creating a LocalDate instance
+LocalDate currentDate = LocalDate.now();
+System.out.println("Current Date: " + currentDate);
+
+// Creating a LocalTime instance
+LocalTime currentTime = LocalTime.now();
+System.out.println("Current Time: " + currentTime);
+
+// Creating a LocalDate instance from individual components
+LocalDate anotherDate = LocalDate.of(2023, 5, 15);
+System.out.println("Another Date: " + anotherDate);
+
+// Adding days to a LocalDate
+LocalDate futureDate = anotherDate.plusDays(7);
+System.out.println("Future Date: " + futureDate);
+
+// Creating a LocalTime instance from individual components
+LocalTime specifiedTime = LocalTime.of(14, 30, 0);
+System.out.println("Specified Time: " + specifiedTime);
+
+By using LocalDate and LocalTime, you can efficiently work with dates and times in a local context, perform calculations, and format or parse date-time values as needed.
+
+3. LocalDateTime:
+The LocalDateTime class represents a date-time without a time zone in the ISO-8601 calendar system. It is an immutable class that combines the features of LocalDate (representing a date) and LocalTime (representing a time) into a single instance.
+LocalDateTime instances represent a date-time in the year-month-day-hour-minute-second-nanosecond format (yyyy-MM dd'T'HH:mm:ss.nnnnnnnnn), where the 'T' separates the date and time components.
+
+·	You can create a LocalDateTime instance using static factory methods like LocalDateTime.now() (for the current date and time), LocalDateTime.of(year, month, day, hour, minute, second, nanoSecond), or LocalDateTime.parse(dateTimeString, formatted).
+·	You can also create a LocalDateTime instance by combining a LocalDate and LocalTime using LocalDateTime.of(localDate, localTime).
+·	LocalDateTime provides methods for retrieving individual components of the date-time, such as getYear(), getMonthValue(), getDayOfMonth(), getHour(), getMinute(), and getSecond().
+·	You can perform date-time calculations like adding or subtracting days, months, years, hours, minutes, or seconds using methods like plusDays(), minusMonths(), withYear(), plusHours(), minusMinutes(), and withSecond().
+·	LocalDateTime instances can be compared using relational operators like isBefore(), isAfter(), and equals().
+
+It's important to note that LocalDateTime instances do not store time zone information and represent a date-time in the context of a local time, without any consideration for time zones or daylight saving time. If you need to work with date-time values that have time zone information, you should consider using the ZonedDateTime or OffsetDateTime classes instead.
+
+Which method can be used to create a LocalDate instance for the current date?
+
+
+·	LocalDate.now()
+
+
+
+********************************************* 58.1.1*********************************************Understanding multitasking and multithreading
+
+The word Multitasking is applied to the operating system performing multiple tasks simultaneously. These tasks are called processes.
+
+A process is a running instance of a program code, which uses resources like Memory, CPU cycles etc.
+
+While you are reading this text, you already have many tasks (processes) being simultaneously run by your OS (operating system) like the browser instance, clock.. etc.
+
+When we execute a Java class, a JVM (Java Virtual Machine) instance is created and launched as a separate program, which in turn executes the code in our Java class.
+
+Java language has support for multithreading. Meaning we can write code which will create multiple threads. A thread is an independent execution flow that can run simultaneously along with its parent which launched it.
+
+Click on the Live Demo button to see live threads in action. Make sure to fiddle around with pause and resume options.
+
+The way processes are scheduled and managed by the operating system, threads that are created and run in a JVM have a one-to-one mapping to a corresponding OS threads (called native threads). For more details click here and read the Threading Model section..
+
+In Java, threads have a priority which can be set. When a new thread is created, by default it receives the priority of its parent thread. This priority is used in thread scheduling.
+
+Individual processes in an operating system have their own memory space. While the threads launched in a JVM, share the same context and the memory space used by the JVM. For this reason threads are also considered light-weight when compared to processes. though such a statement is debatable.
+
+Until Java version 1.3, Java used to have Green Threads which were light-weight and were scheduled by the JVM. Green threads were not taking advantage of multiple processors available in a multi-processor machine. From Java version 1.3 and later versions we only have native threads, which are scheduled by the native OS and provide performance benefits by taking advantage of the multiple processors available on a multi-processor machine.
+
+We will learn more about the details of this code in the later sections.
+
+What is the difference between multithreading and multitasking?
+·	Multithreading is the execution of multiple threads within a single task, whereas multitasking is the execution of multiple tasks simultaneously.
+
+
+
+********************************************* 58.2.1. ********************************************* Understanding Thread states
+
+A thread can be in one of the below mentioned states:
+1.	NEW - when a thread is just created and is not started yet (meaning the start() method is not yet called on it).
+2.	RUNNABLE - when the start method is called and the thread is executing the code in run() method.
+3.	BLOCKED - when a thread is unable to proceed with execution because it is waiting for a monitor lock (we will learn more about locks later.)
+4.	WAITING - when a thread is waiting indefinitely for another thread to perform a particular action.
+5.	TIMED_WAITING - when a thread that is waiting for another thread to perform an action for a specified waiting time, after which it will resume.
+6.	TERMINATED - when a thread finishes its execution.
+Note that when a new Thread is created it does not start automatically. At that moment it is in the NEW state. And after a thread's state changes to TERMINATED, it cannot be started again.
+
+Note: We should never use the stop() method provided in the Thread class as it is deprecated and can lead to unexpected results. Instead we should manually write the code to stop a running thread.
+
+Click on the Stop Thread Demo button to learn how to use a simple boolean flag to manually implement stop() feature in a thread.
+
+Click on the Stop Feature - Multiple Threads Demo button to understand the working of stop() method in multiple threads.
+
+
+What are the possible states of a thread in Java?
+
+
+·	New, Runnable, Waiting, Terminated
+
+
+
+********************************************* 59.1.1*********************************************Understanding Thread Class and Runnable interface
+
+Thread Class:
+The Thread class in Java is a part of the java.lang package and provides the fundamental functionality for creating and managing threads. Threads represent separate paths of execution within a program. You can create a thread by extending the Thread class or by implementing the Runnable interface. Here's how you can create a thread by extending the Thread class:
+
+ class MyThread extends Thread {
+   public void run() {
+     // Code to be executed by the thread
+   }
+ }
+ 
+ // Create an instance of MyThread and start the thread 
+ MyThread thread = new MyThread();
+ thread.start();
+
+Key features of the Thread class include:
+1.	Thread Lifecycle: Threads go through various states such as new, runnable, blocked, waiting, and terminated. The Thread class provides methods to control the lifecycle of a thread, such as start(), sleep(), join(), yield(), and interrupt().
+2.	Priority: Threads can have priority levels ranging from 1 to 10. Higher-priority threads are given preference for execution by the scheduler.
+3.	Synchronization: The Thread class provides synchronized methods and blocks for coordinating access to shared resources among multiple threads.
+
+Runnable Interface:
+The Runnable interface in Java represents a task that can be executed by a thread. It provides a single abstract method, run(), which contains the code to be executed by the thread. By implementing the Runnable interface, you separate the thread's behavior from its implementation, which promotes better code organization and reusability. Here's how you can create a thread by implementing the Runnable interface:
+
+ class MyRunnable implements Runnable {
+   public void run() {
+     // Code to be executed by the thread
+   }
+ }
+
+ // Create an instance of MyRunnable and pass it to the Thread constructor 
+ Thread thread = new Thread(new MyRunnable());
+ thread.start();
+
+Key features of the Runnable interface include:
+1.	Encapsulation: Runnable separates the task logic from the thread management logic, promoting better separation of concerns.
+2.	Flexibility: Multiple threads can execute the same Runnable instance concurrently, providing better resource utilization.
+3.	Compatibility: Runnable is compatible with other Java APIs, such as Executors in the java.util.concurrent package, which provides advanced features for managing thread execution.
+
+Which of the following statements is true about the Thread class and the Runnable interface in Java?
+
+·	
+The Thread class represents a thread of execution, while the Runnable interface provides a way to create a new thread by implementing its run() method.
